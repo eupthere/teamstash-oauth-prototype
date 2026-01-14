@@ -43,6 +43,33 @@ POST /oauth/token
   grant_type=refresh_token
   refresh_token=<refresh_token>
 
+### Client ID
+
+The `client_id` parameter identifies which application is requesting authorization.
+
+**Important**: `client_id` identifies the **application**, not the user. User identity is separate and stored inside tokens (e.g., JWT `sub` claim).
+
+Each client type has a unique identifier:
+- Browser extension: `extension`
+- Obsidian plugin: `obsidian`
+- Figma plugin: `figma`
+- Web frontend: `web`
+
+The authorization server uses `client_id` to:
+- Determine which redirect URIs are allowed for this client
+- Apply client-specific security policies (PKCE requirements, allowed scopes)
+- Track and revoke access per-client if needed
+
+All OAuth requests must include `client_id`:
+
+```
+/oauth/authorize?client_id=extension&...
+```
+
+Each `client_id` is registered in the WAS with its configuration (redirect URIs, client type, security requirements).
+
+An issued access token always represents a specific **user** authorizing a specific **client application**.
+
 ### PKCE
 
 Plugin-like clients are public OAuth clients and must use PKCE (Proof Key for Code Exchange) in production.
