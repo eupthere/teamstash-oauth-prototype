@@ -13,6 +13,7 @@ It is responsible for:
 ## Must Implement
 
 ### Web Session Authentication
+- `/signup` - User registration (creates new user account)
 - `/login` - Traditional email/password login (creates session cookie)
 - `/logout` - Session termination
 
@@ -78,7 +79,7 @@ Example registered clients:
 
 - NestJS framework
 - JWT for access tokens
-- Database or in-memory store for:
+- In-memory store for:
   - User accounts
   - Authorization codes (short-lived)
   - Refresh tokens

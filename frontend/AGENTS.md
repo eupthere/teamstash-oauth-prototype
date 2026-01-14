@@ -11,6 +11,7 @@ It provides a user interface for:
 
 ## Must Implement
 
+- **Signup page** - User registration form that posts to `/signup`
 - **Login page** - Email/password form that posts to `/login`
 - **Logout functionality** - Calls `/logout` and clears session
 - **Session-based authentication** - Uses cookies, not OAuth tokens
@@ -20,7 +21,13 @@ It provides a user interface for:
 
 The web frontend uses **traditional session-based authentication**, NOT OAuth.
 
-Flow:
+Signup Flow:
+1. User enters email/password on signup page
+2. Frontend posts registration data to backend `/signup`
+3. Backend creates new user account
+4. User can then log in
+
+Login Flow:
 1. User enters email/password on login page
 2. Frontend posts credentials to backend `/login`
 3. Backend creates session and returns session cookie
