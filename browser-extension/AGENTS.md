@@ -71,6 +71,7 @@ If the user is not logged in, the OAuth flow will redirect them to the web login
 
 ## Technical Constraints
 
+- Built with **WXT framework** for cross-browser extension development
 - Uses browser extension storage APIs (`chrome.storage.local` / `browser.storage.local`)
 - Communicates with callback page via `postMessage`
 - No direct access to HTTP cookies
