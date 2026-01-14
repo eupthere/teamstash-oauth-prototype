@@ -8,5 +8,11 @@
     "browser-extension",
     "desktop-app",
     "frontend"
-  ]
+  ],
+  "scripts": {
+    "start:dev": "concurrently \"npm run start:dev --workspace=backend\" \"npm run dev --workspace=frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
 }
