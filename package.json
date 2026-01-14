@@ -1,0 +1,6 @@
+{
+  "name": "teamstash-oauth-prototype",
+  "description": "A prototype for OAuth integration in TeamStash. It demonstrates the OAuth flow for extension authorization.",
+  "version": "1.0.0",
+  "type": "module"
+}
