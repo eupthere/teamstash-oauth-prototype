@@ -33,6 +33,16 @@ POST /oauth/token
   grant_type=refresh_token
   refresh_token=<refresh_token>
 
+### PKCE
+
+Plugin-like clients are public OAuth clients and must use PKCE (Proof Key for Code Exchange) in production.
+
+Prototype implementations may omit PKCE for simplicity.
+
+When PKCE is enabled:
+- /oauth/authorize requests must include code_challenge and code_challenge_method=S256
+- /oauth/token requests must include code_verifier
+
 ## Extension Authentication Flow
 
 Browser extensions and plugin-like clients must:
