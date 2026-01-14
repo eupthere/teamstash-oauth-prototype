@@ -10,7 +10,7 @@
     "frontend"
   ],
   "scripts": {
-    "start:dev": "concurrently \"npm run start:dev --workspace=backend\" \"npm run dev --workspace=frontend\""
+    "start:dev": "concurrently \"npm run start:dev --workspace=backend\" \"npm run dev --workspace=frontend\" \"npm run dev --workspace=browser-extension\""
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
