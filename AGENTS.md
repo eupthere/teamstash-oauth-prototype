@@ -30,6 +30,14 @@ These clients must authenticate via:
 GET  /oauth/authorize
 POST /oauth/token
 
+Authorization requests must include:
+- client_id
+- redirect_uri
+- response_type=code
+- state
+
+`response_type=code` indicates Authorization Code Flow, where an authorization code is returned and later exchanged for tokens at `/oauth/token`. This is the secure, standard flow that supports refresh tokens and PKCE.
+
 If a user is already logged in via the web browser, the plugin can leverage the existing session to obtain OAuth tokens from the authorization server without requiring re-authentication.
 
 Access tokens are JWT Bearer tokens with short expiration times.
