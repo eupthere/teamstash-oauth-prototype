@@ -17,6 +17,20 @@ interface RequestWithUser extends Request {
 export class ResourcesController {
   constructor(private readonly userStore: UserStore) {}
 
+  /**
+   * User identity endpoint (OIDC-style, but not a standard OIDC UserInfo endpoint)
+   *
+   * This endpoint returns user identity information for a valid OAuth access token.
+   * It follows an OIDC-inspired pattern but is not a standards-compliant OIDC implementation.
+   *
+   * Real OIDC UserInfo endpoint differences:
+   * - OIDC issues a separate ID token (JWT) along with the access token
+   * - OIDC UserInfo endpoint at /userinfo follows OpenID Connect specification
+   * - OIDC standardizes claims (sub, name, email, etc.) and scopes (openid, profile, email)
+   * - OIDC provides discovery metadata at .well-known/openid-configuration
+   *
+   * This implementation is a custom endpoint for returning user data, suitable for this prototype.
+   */
   @Get('me')
   @UseGuards(JwtAuthGuard)
   getMe(@Req() req: RequestWithUser) {
