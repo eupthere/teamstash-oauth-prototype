@@ -7,10 +7,15 @@ import {
   HttpStatus,
   Session,
   UnauthorizedException,
+  InternalServerErrorException,
+  Res,
+  UseGuards,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import { SignupDto } from './dto/signup.dto';
-import { SigninDto } from './dto/signin.dto';
+import { LoginDto } from './dto/login.dto';
 import { UserStore } from '../stores/user.store';
+import { SessionAuthGuard } from '../common/guards/session-auth.guard';
 import * as bcrypt from 'bcrypt';
 
 @Controller()
@@ -51,13 +56,13 @@ export class SessionAuthController {
     };
   }
 
-  @Post('/signin')
+  @Post('/login')
   @HttpCode(HttpStatus.OK)
-  async signin(
-    @Body() signinDto: SigninDto,
+  async login(
+    @Body() loginDto: LoginDto,
     @Session() session: Record<string, any>,
   ) {
-    const { email, password } = signinDto;
+    const { email, password } = loginDto;
 
     // Find user by email
     const user = this.userStore.findByEmail(email);
@@ -77,12 +82,38 @@ export class SessionAuthController {
 
     // Return user info (without password hash)
     return {
-      message: 'Signed in successfully',
+      message: 'Logged in successfully',
       user: {
         id: user.id,
         email: user.email,
         createdAt: user.createdAt,
       },
     };
+  }
+
+  @Post('/logout')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(SessionAuthGuard)
+  async logout(
+    @Session() session: Record<string, any>,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return new Promise((resolve, reject) => {
+      session.destroy((err: Error) => {
+        if (err) {
+          reject(
+            new InternalServerErrorException('Failed to logout. Please try again.'),
+          );
+        } else {
+          // Clear the session cookie
+          res.clearCookie('connect.sid', {
+            httpOnly: true,
+            sameSite: 'lax',
+          });
+
+          resolve({ message: 'Logged out successfully' });
+        }
+      });
+    });
   }
 }
