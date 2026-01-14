@@ -41,7 +41,12 @@ Browser extensions and plugin-like clients must:
 - If not logged in, the user will be redirected to the web login page first
 - Receive an authorization code via redirect
 - Exchange code via /oauth/token to receive both access token and refresh token
-- Store both tokens securely in extension local storage
+- Store both tokens securely using platform-specific persistent storage:
+  - Browser extensions: `chrome.storage.local` / `browser.storage.local`
+  - Obsidian plugins: Encrypted data via `saveData()` API
+  - Figma plugins: `figma.clientStorage`
+  - Electron apps: OS-level secure storage (Keychain/Credential Manager) or encrypted files
+  - Prefer persistent storage over session storage for better UX (tokens survive browser restarts)
 - Attach access token to API requests as: `Authorization: Bearer <access_token>`
 - When access token expires, use refresh token to obtain a new access token
 
