@@ -22,10 +22,16 @@ POST /oauth/token
 
 If a user is already logged in via the web browser, the plugin can leverage the existing session to obtain OAuth tokens from the authorization server without requiring re-authentication.
 
-Access tokens are JWT Bearer tokens.
+Access tokens are JWT Bearer tokens with short expiration times.
+Refresh tokens are long-lived tokens used to obtain new access tokens.
 
 Protected APIs require:
 Authorization: Bearer <access_token>
+
+Token refresh:
+POST /oauth/token
+  grant_type=refresh_token
+  refresh_token=<refresh_token>
 
 ## Extension Authentication Flow
 
@@ -34,8 +40,9 @@ Browser extensions and plugin-like clients must:
 - If the user is already logged in via web browser, they can authorize the extension immediately
 - If not logged in, the user will be redirected to the web login page first
 - Receive an authorization code via redirect
-- Exchange code via /oauth/token
-- Store access token in extension local storage
-- Attach token to API requests as: `Authorization: Bearer <access_token>`
+- Exchange code via /oauth/token to receive both access token and refresh token
+- Store both tokens securely in extension local storage
+- Attach access token to API requests as: `Authorization: Bearer <access_token>`
+- When access token expires, use refresh token to obtain a new access token
 
 No cookies are used for extension authentication; only OAuth tokens.
