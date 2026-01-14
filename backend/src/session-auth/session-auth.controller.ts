@@ -6,8 +6,10 @@ import {
   HttpCode,
   HttpStatus,
   Session,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { SignupDto } from './dto/signup.dto';
+import { SigninDto } from './dto/signin.dto';
 import { UserStore } from '../stores/user.store';
 import * as bcrypt from 'bcrypt';
 
@@ -41,6 +43,41 @@ export class SessionAuthController {
     // Return user info (without password hash)
     return {
       message: 'User registered successfully',
+      user: {
+        id: user.id,
+        email: user.email,
+        createdAt: user.createdAt,
+      },
+    };
+  }
+
+  @Post('/signin')
+  @HttpCode(HttpStatus.OK)
+  async signin(
+    @Body() signinDto: SigninDto,
+    @Session() session: Record<string, any>,
+  ) {
+    const { email, password } = signinDto;
+
+    // Find user by email
+    const user = this.userStore.findByEmail(email);
+    if (!user) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    // Verify password
+    const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    // Establish session for the user
+    session.userId = user.id;
+    session.email = user.email;
+
+    // Return user info (without password hash)
+    return {
+      message: 'Signed in successfully',
       user: {
         id: user.id,
         email: user.email,
