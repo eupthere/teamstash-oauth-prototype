@@ -51,6 +51,57 @@ POST /oauth/token
   grant_type=refresh_token
   refresh_token=<refresh_token>
 
+### Client Intent and OAuth Usage Model
+
+This prototype demonstrates two different OAuth usage patterns:
+
+#### Browser Extension — Delegated Resource Access
+
+Browser extensions run inside an already-open web browser and can rely on the browser's existing web session.
+
+Therefore, extensions use **OAuth primarily for delegated resource access**, not for user-facing login.
+
+Flow:
+- User logs in via the web frontend (session cookie)
+- Extension opens `/oauth/authorize`
+- Authorization server reuses existing web session
+- Extension receives access token
+- Extension calls protected resource APIs
+
+The extension does **not** maintain its own login UI or user identity state.
+It simply holds an access token to access user-owned resources.
+
+This follows OAuth's original purpose: **authorization for third-party clients**.
+
+#### Desktop Application — OAuth Login (OIDC-style)
+
+Desktop applications may run without an existing browser session and typically require explicit user identity within the app.
+
+Therefore, the desktop app uses **OAuth as a login mechanism** (OIDC-style identity flow).
+
+Flow:
+- Desktop app opens system browser to `/oauth/authorize`
+- User logs in if no web session exists
+- Desktop app receives tokens
+- Desktop app calls `/api/me` to obtain user identity
+- Desktop app maintains local login state
+
+In addition to accessing protected resources, the desktop app uses OAuth to **identify the user** and provide login/logout UX.
+
+#### Summary of Client Intent
+
+Both extension and desktop app:
+- Use `/oauth/authorize` and `/oauth/token`
+- Receive access tokens (and refresh tokens)
+- Call protected resource APIs with `Authorization: Bearer <access_token>`
+
+The difference lies in **client intent**:
+
+| Client Type       | Primary Purpose              | Uses Identity Endpoint | Maintains Login UI |
+| ----------------- | ---------------------------- | ---------------------- | ------------------ |
+| Browser Extension | Delegated resource access    | No                     | No                 |
+| Desktop App       | User login + resource access | Yes                    | Yes                |
+
 ### Client ID
 
 The `client_id` parameter identifies which application is requesting authorization.
