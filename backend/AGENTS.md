@@ -84,3 +84,16 @@ Example registered clients:
   - Authorization codes (short-lived)
   - Refresh tokens
   - Client registrations
+
+## Project Structure
+
+The backend follows standard NestJS module structure:
+
+- `src/modules/session-auth` → Traditional web login (`/signup`, `/login`, `/logout`)
+- `src/modules/oauth` → OAuth Authorization Server (`/oauth/authorize`, `/oauth/token`)
+- `src/modules/callback-pages` → Web callback pages (`/oauth/extension-callback`)
+- `src/modules/resources` → Protected APIs (`/api/me`, `/api/protected-resource`)
+- `src/common/guards` → JWT authentication guard
+- `src/infra` → In-memory stores for prototype data
+
+Each domain must be implemented as a NestJS module with controllers and services.
