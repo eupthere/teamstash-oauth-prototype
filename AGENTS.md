@@ -187,8 +187,10 @@ Therefore, browser-based OAuth flows require a **web-hosted callback page** that
 The WAS hosts a callback URL such as:
 
 ```
-https://<was-domain>/oauth/extension-callback
+http://localhost:3000/oauth/extension-callback
 ```
+
+(Use `http://` for this prototype; production would use `https://`)
 
 After successful login and authorization, the OAuth server redirects the browser to:
 
@@ -206,12 +208,12 @@ It acts purely as a **bridge between OAuth redirects and the extension**.
 ### Why Not Redirect to `chrome-extension://`?
 
 While theoretically possible, redirecting directly to extension URLs is problematic:
-- Many OAuth servers reject non-HTTPS redirect URIs
+- Many OAuth servers reject non-HTTP/HTTPS redirect URIs
 - Different schemes per browser (`chrome-extension://`, `moz-extension://`)
 - Harder to register and debug
 - Inconsistent cross-browser behavior
 
-A WAS-hosted HTTPS callback page is simpler and standard-compliant.
+A WAS-hosted HTTP callback page (HTTPS in production) is simpler and standard-compliant.
 
 ### Client-Specific Redirect URIs
 
@@ -220,10 +222,12 @@ but **redirect URIs are client-specific**:
 
 | Client Type             | Typical Redirect Mechanism                                    |
 |------------------------|---------------------------------------------------------------|
-| Browser extension      | `https://<was>/oauth/extension-callback` (web relay page)    |
+| Browser extension      | `http://localhost:3000/oauth/extension-callback` (web relay page)    |
 | Obsidian / Electron app| Custom URI scheme (e.g. `obsidian://oauth-callback`)         |
 | Desktop apps           | OS-registered custom scheme (e.g. `myapp://oauth-callback`)  |
 | Web app                | Normal web callback (e.g. `/oauth/web-callback`)             |
+
+*Note: Using `http://` for prototype; production would use `https://`*
 
 The web-hosted callback page is **specifically for browser-based clients**.
 Other plugin environments use different redirect mechanisms appropriate to their platform.

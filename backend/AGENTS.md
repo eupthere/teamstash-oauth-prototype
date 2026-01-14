@@ -46,7 +46,7 @@ It is responsible for:
 
 ## Security Rules
 
-- **HTTPS only** in production
+- **HTTP is acceptable for this prototype** (HTTPS would be required in production)
 - **Must validate `state` parameter** to prevent login CSRF
 - **Must enforce PKCE** for public clients
 - **Must validate `redirect_uri`** against registered client configuration
@@ -63,9 +63,9 @@ Each `client_id` must be registered with:
 - `pkce_required`: Boolean
 
 Example registered clients:
-- `extension` → `https://<was>/oauth/extension-callback`
+- `extension` → `http://localhost:3000/oauth/extension-callback` (or appropriate backend URL)
 - `desktop` → `myapp://oauth-callback` (custom URI scheme)
-- `web` → `https://<was>/oauth/web-callback`
+- `web` → `http://localhost:3000/oauth/web-callback`
 
 ## Must NOT
 

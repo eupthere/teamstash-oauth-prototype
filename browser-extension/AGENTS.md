@@ -16,7 +16,7 @@ This demonstrates OAuth's original purpose: **authorization for third-party clie
    - Generate PKCE `code_verifier` and `code_challenge`
    - Open new tab/window to `/oauth/authorize` with:
      - `client_id=extension`
-     - `redirect_uri=https://<was>/oauth/extension-callback`
+     - `redirect_uri=http://localhost:3000/oauth/extension-callback` (or appropriate backend URL)
      - `response_type=code`
      - `state=<generated_state>`
      - `code_challenge=<generated_challenge>`

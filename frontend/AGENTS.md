@@ -7,7 +7,7 @@ This workspace implements the traditional web frontend for user authentication.
 It provides a user interface for:
 - Logging in with email/password
 - Managing user account
-- Viewing authorized applications (future)
+- Viewing authorized applications
 
 ## Must Implement
 
@@ -15,7 +15,7 @@ It provides a user interface for:
 - **Login page** - Email/password form that posts to `/login`
 - **Logout functionality** - Calls `/logout` and clears session
 - **Session-based authentication** - Uses cookies, not OAuth tokens
-- **Authorized apps page** (optional/future) - Shows which OAuth clients have been granted access
+- **Authorized apps page**  - Shows which OAuth clients have been granted access
 
 ## Authentication Model
 
@@ -49,13 +49,13 @@ The web frontend does NOT:
 
 ## Security Considerations
 
-- HTTPS only in production
+- HTTP is acceptable for this prototype (HTTPS would be required in production)
 - CSRF protection on forms
-- Secure session cookie settings (`HttpOnly`, `Secure`, `SameSite`)
+- Session cookie settings (`HttpOnly`, `SameSite`; `Secure` flag not needed for HTTP)
 - Input validation on login forms
 
 ## Technical Stack
 
-- React/Vue/vanilla JS (to be decided)
+- Vite React JS
 - Communicates with backend via traditional HTTP requests
 - Session cookies for authentication state
