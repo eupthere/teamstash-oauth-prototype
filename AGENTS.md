@@ -47,9 +47,9 @@ POST /oauth/token
 
 Plugin-like clients are public OAuth clients and must use PKCE (Proof Key for Code Exchange) in production.
 
-Prototype implementations may omit PKCE for simplicity.
+This prototype should implement PKCE.
 
-When PKCE is enabled:
+When implementing PKCE:
 - /oauth/authorize requests must include code_challenge and code_challenge_method=S256
 - /oauth/token requests must include code_verifier
 
@@ -66,7 +66,7 @@ How it works:
 
 Without `state`, an attacker could trick a user into authorizing the attacker's account, causing the victim's extension to log into the wrong account.
 
-All implementations should use `state`, including prototypes.
+This prototype should implement `state` parameter validation.
 
 ## Extension Authentication Flow
 
