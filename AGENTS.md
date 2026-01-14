@@ -1,5 +1,15 @@
 # AGENTS.md
 
+## Project Purpose
+
+This project is a prototype demonstration for OAuth-based authentication architecture.
+
+My team is working on a separate project where:
+- Users log in via web frontend page (traditional session-based authentication)
+- External programs (browser extensions, plugins, third-party apps) authenticate using OAuth
+
+This prototype demonstrates how to implement OAuth Authorization Server and Resource Server functionality to support plugin-like clients while maintaining traditional web authentication for the main application.
+
 ## Authentication Architecture
 
 The WAS acts as both the OAuth Authorization Server and Resource Server.
