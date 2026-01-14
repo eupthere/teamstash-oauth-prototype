@@ -43,6 +43,21 @@ When PKCE is enabled:
 - /oauth/authorize requests must include code_challenge and code_challenge_method=S256
 - /oauth/token requests must include code_verifier
 
+### State Parameter
+
+The `state` parameter prevents login CSRF by binding OAuth callbacks to requests initiated by the client.
+
+How it works:
+1. Client generates a random `state` value before starting OAuth flow
+2. Client stores `state` locally and includes it in `/oauth/authorize` request
+3. OAuth server returns the same `state` in the callback redirect
+4. Client verifies the returned `state` matches the stored value
+5. Callbacks with mismatched state must be rejected
+
+Without `state`, an attacker could trick a user into authorizing the attacker's account, causing the victim's extension to log into the wrong account.
+
+All implementations should use `state`, including prototypes.
+
 ## Extension Authentication Flow
 
 Browser extensions and plugin-like clients must:
