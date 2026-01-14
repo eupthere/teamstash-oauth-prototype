@@ -51,3 +51,58 @@ Browser extensions and plugin-like clients must:
 - When access token expires, use refresh token to obtain a new access token
 
 No cookies are used for extension authentication; only OAuth tokens.
+
+## OAuth Callback URIs
+
+### Why Callback Pages Exist
+
+Browser extensions cannot directly receive HTTP redirects.
+Only normal web pages (browser tabs/windows) can receive OAuth redirects with URL parameters.
+
+Therefore, browser-based OAuth flows require a **web-hosted callback page** that receives the redirect and relays the authorization result to the extension.
+
+### Callback Page Mechanism
+
+The WAS hosts a callback URL such as:
+
+```
+https://<was-domain>/oauth/extension-callback
+```
+
+After successful login and authorization, the OAuth server redirects the browser to:
+
+```
+/oauth/extension-callback?code=AUTH_CODE&state=STATE
+```
+
+This page:
+- Reads the authorization code from the URL
+- Passes it to the browser extension via `postMessage` + content script
+- Optionally closes itself
+
+It acts purely as a **bridge between OAuth redirects and the extension**.
+
+### Why Not Redirect to `chrome-extension://`?
+
+While theoretically possible, redirecting directly to extension URLs is problematic:
+- Many OAuth servers reject non-HTTPS redirect URIs
+- Different schemes per browser (`chrome-extension://`, `moz-extension://`)
+- Harder to register and debug
+- Inconsistent cross-browser behavior
+
+A WAS-hosted HTTPS callback page is simpler and standard-compliant.
+
+### Client-Specific Redirect URIs
+
+All clients share the same `/oauth/authorize` and `/oauth/token` endpoints,
+but **redirect URIs are client-specific**:
+
+| Client Type             | Typical Redirect Mechanism                                    |
+|------------------------|---------------------------------------------------------------|
+| Browser extension      | `https://<was>/oauth/extension-callback` (web relay page)    |
+| Obsidian / Electron app| Custom URI scheme (e.g. `obsidian://oauth-callback`)         |
+| Desktop apps           | OS-registered custom scheme (e.g. `myapp://oauth-callback`)  |
+| Web app                | Normal web callback (e.g. `/oauth/web-callback`)             |
+
+The web-hosted callback page is **specifically for browser-based clients**.
+Other plugin environments use different redirect mechanisms appropriate to their platform.
